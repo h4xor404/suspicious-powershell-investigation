@@ -1,0 +1,16 @@
+title: Suspicious Encoded PowerShell Cradle Execution
+id: 7b89e3a1-4389-4921-9876-bc3451290fae
+status: experimental
+description: Detects powershell.exe execution containing hidden window style parameters and base64 encoded payload cradles.
+references: [https://attack.mitre.org/techniques/T1059/001/, https://attack.mitre.org/techniques/T1027/, https://attack.mitre.org/techniques/T1105/]
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection_binary:
+    Image|endswith: ['\powershell.exe', '\pwsh.exe']
+  selection_cli_flags:
+    CommandLine|contains: ['-enc', '-encodedcommand', '-w hidden', '-windowstyle hidden']
+  condition: selection_binary and selection_cli_flags
+level: high
+tags: [attack.execution, attack.t1059.001, attack.defense_evasion, attack.t1027, attack.command_and_control, attack.t1105]
